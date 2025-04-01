@@ -1,20 +1,19 @@
 import { useState, useEffect, useMemo } from "react";
-import DeleteModal from "../subCompounds/DeleteModal"
-import VendorCard from "../subCompounds/VendorCard"
+import DeleteModal from "../subCompounds/DeleteModal";
+import VendorCard from "../subCompounds/VendorCard";
 import { initialVendors, isOpen } from "../utils";
 import {
   TruckIcon,
-  PlusIcon,  
-  XMarkIcon,    
+  PlusIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { v4 as uuidv4 } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
 
-
 function Tracker() {
   const [vendors, setVendors] = useState(() => {
     const saved = localStorage.getItem("streetFoodVendors");
-    return JSON.parse(saved) ;
+    return saved ? JSON.parse(saved) : []; // Ensure it's an empty array if null
   });
   const [showForm, setShowForm] = useState(false);
   const [editVendor, setEditVendor] = useState(null);
@@ -27,7 +26,7 @@ function Tracker() {
     location: "",
     hours: "",
     menu: "",
-    rating:0
+    rating: 0
   });
   const [formError, setFormError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -38,7 +37,6 @@ function Tracker() {
       "streetFoodVendors",
       JSON.stringify(Array.isArray(vendors) && vendors.length ? vendors : initialVendors)
     );
-    
   }, [vendors]);
 
   const validateHours = (hours) => {
@@ -97,7 +95,7 @@ function Tracker() {
   };
 
   const filteredVendors = useMemo(() => {
-    if (!vendors || !Array.isArray(vendors)) return []; // Prevent errors if vendors is null/undefined
+    if (!Array.isArray(vendors)) return []; // Prevent errors if vendors is null/undefined
     
     let result = vendors.filter((v) => {
       const typeMatch = filters.type === "all" || v.type === filters.type;
@@ -117,7 +115,7 @@ function Tracker() {
         : new Date(a.reportedAt) - new Date(b.reportedAt)
     );
   }, [vendors, filters, search, sortOrder]);
-  
+
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
       <Toaster position="top-right" />
@@ -152,8 +150,8 @@ function Tracker() {
               className="w-full sm:w-auto p-2 border rounded-lg"
             >
               {
-                vendors.map((e,index)=>{
-                  return(
+                (vendors || []).map((e, index) => {
+                  return (
                     <option value={e.type} key={index}>{e.type}</option>
                   )
                 })
@@ -237,7 +235,6 @@ function Tracker() {
                       }
                       className="w-full p-2 border rounded-lg"
                     />
-                     
                   </div>
                   <div>
                     <label className="block text-gray-700 font-medium mb-1">
@@ -302,7 +299,7 @@ function Tracker() {
                     className="w-30px p-2 border rounded-lg"
                   />
                 </div>
- 
+
                 <div className="flex gap-4">
                   <button
                     type="button"
@@ -323,14 +320,14 @@ function Tracker() {
           </div>
         )}
 
-      {showDeleteModal && (
+        {showDeleteModal && (
           <DeleteModal
             vendor={vendorToDelete}
             onConfirm={confirmDelete}
             onCancel={() => setShowDeleteModal(false)}
           />
         )}
-    </div>
+      </div>
     </div>
   );
 }

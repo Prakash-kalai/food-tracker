@@ -7,7 +7,7 @@ const DeleteModal = ({ vendor, onConfirm, onCancel }) => {
         </h2>
         <p className="text-gray-600 mb-6">
           Are you sure you want to delete
-          <span className="font-semibold"> {vendor.name}</span>? This action
+          <span className="font-semibold"> {vendor?.name}</span>? This action
           cannot be undone.
         </p>
         <div className="flex gap-4">

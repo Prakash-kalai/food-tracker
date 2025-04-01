@@ -22,9 +22,9 @@ const VendorCard = ({ vendor, onEdit, onDelete }) => {
     <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">{vendor.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-800">{vendor?.name}</h2>
           <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full text-sm capitalize">
-            {vendor.type}
+            {vendor?.type}
           </span>
         </div>
         <div className="flex gap-2">
